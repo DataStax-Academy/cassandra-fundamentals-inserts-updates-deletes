@@ -24,10 +24,10 @@
         <br/>
         <div class="scenario-objectives">In this hands-on lab, you explored:</div>
         <ul>
-              <li><span class="scenario-objective">Tables and the CQL <code>CREATE TABLE</code> statement</span></li>
-              <li><span class="scenario-objective">Tables with <i>single-row partitions</i></span></li>
-              <li><span class="scenario-objective"><i>Simple</i> and <i>composite</i> partition keys</span></li>
-              <li><span class="scenario-objective">Useful CQL statements and CQL shell commands that work with tables</span></li>
+              <li><span class="scenario-objective">Inserts, updates, deletes and upserts</span></li>
+              <li><span class="scenario-objective">CQL statements <code>INSERT</code>, <code>UPDATE</code> and <code>DELETE</code></span></li>
+              <li><span class="scenario-objective">A way to update primary key columns</span></li>
+              <li><span class="scenario-objective">Conditional inserts and updates</span></li>
         </ul>
         <div class="resources">Learn more about Cassandra on <a href="https://datastax.com/dev" target="_blank">datastax.com/dev</a>:</div>
         <ul>
