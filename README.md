@@ -3,7 +3,7 @@
 ## Learn how to insert, update, delete, and upsert data into tables in a Cassandra NoSQL database
 
 **In this hands-on lab, you will:**
-* Learn how inserts, updates, deletes and upserts work in Apache Cassandra™
+* Learn how inserts, updates, deletes and upserts work in Apache Cassandra
 * Practice using CQL statements `INSERT`, `UPDATE` and `DELETE`   
 * Find a solution to updating primary key columns
 * Use advanced features like conditional inserts and updates
