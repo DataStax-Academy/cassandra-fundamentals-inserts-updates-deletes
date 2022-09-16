@@ -59,11 +59,12 @@ SELECT * FROM ratings_by_user;
 ```
 
 <br/>
+<br/>
 
-✅ We only inserted a half of the rows shown above and left 
+We only inserted a half of the rows shown above and left 
 the other half for you to practice!
 
-Insert the remaining rows into the tables:
+✅ Insert the remaining rows into the tables:
 <details>
   <summary>Solution</summary>
 
