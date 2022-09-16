@@ -41,22 +41,40 @@ astra setup
 astra db list
 ```
 
-✅ Create database `cassandra-fundamentals` and keyspace `ks_single_row_partitions` if they do not exist:
+✅ Create database `cassandra-fundamentals` and keyspace `ks_inserts_updates_deletes` if they do not exist:
 ```
-astra db create cassandra-fundamentals -k ks_single_row_partitions --if-not-exist --wait
+astra db create cassandra-fundamentals -k ks_inserts_updates_deletes --if-not-exist --wait
 ```
 
 This operation may take a bit longer when creating a new database or resuming an existing hibernated database.
 
-✅ Verify that database `cassandra-fundamentals` is `ACTIVE` and keyspace `ks_single_row_partitions` exists:
+✅ Verify that database `cassandra-fundamentals` is `ACTIVE` and keyspace `ks_inserts_updates_deletes` exists:
 ```
 astra db get cassandra-fundamentals
 ```
 
-✅ Start the CQL shell and connect to database `cassandra-fundamentals` and keyspace `ks_single_row_partitions`:
+✅ Start the CQL shell and connect to database `cassandra-fundamentals` and keyspace `ks_inserts_updates_deletes`:
 ```
 clear
-astra db cqlsh cassandra-fundamentals -k ks_single_row_partitions
+astra db cqlsh cassandra-fundamentals -k ks_inserts_updates_deletes
+```
+
+✅ Create the tables:
+```
+CREATE TABLE IF NOT EXISTS users (
+  email TEXT,
+  name TEXT,
+  age INT,
+  date_joined DATE,
+  PRIMARY KEY ((email))
+);
+CREATE TABLE IF NOT EXISTS ratings_by_user (
+  email TEXT,
+  title TEXT,
+  year INT,
+  rating INT,
+  PRIMARY KEY ((email), title, year)
+);
 ```
 
 <!-- NAVIGATION -->

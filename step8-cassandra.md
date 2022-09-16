@@ -20,46 +20,51 @@
 
 <!-- CONTENT -->
 
-<div class="step-title">What tables with single-row partitions are good for?</div>
+<div class="step-title">Updating primary key columns</div>
 
-In Cassandra, tables are designed to support specific queries. Tables with 
-single-row partitions are generally used to store and retrieve entities 
-by their unique identifiers, such as retrieving a *user by email* or *movie by title and year*.
-
-Of course, it is possible to use tables with 
-single-row partitions for relationships, such as *user rated movie* in the example below, but tables 
-with multi-row partitions are much more suitable for that. 
- 
+✅ One of our users wants to change his email from *joe@datastax.com* to
+*joseph@datastax.com*. There are three rows in two tables that we need to update:
 ```
--- Not a good way to 
--- store relationships ... 
-CREATE TABLE IF NOT EXISTS user_rated_movie (
-  email TEXT,
-  title TEXT,
-  year INT,
-  rating INT,
-  PRIMARY KEY ((email, title, year))
-);
-
--- Tables with multi-row partitions 
--- are the way to go ...
--- Get all rating left by a user
-CREATE TABLE IF NOT EXISTS ratings_by_user (
-  email TEXT,
-  title TEXT,
-  year INT,
-  rating INT,
-  PRIMARY KEY ((email), title, year)
-);
---  Get all ratings left for a movie
-CREATE TABLE IF NOT EXISTS ratings_by_movie (
-  email TEXT,
-  title TEXT,
-  year INT,
-  rating INT,
-  PRIMARY KEY ((title, year), email)
-);
+SELECT * FROM users WHERE email = 'joe@datastax.com';
+SELECT * FROM ratings_by_user WHERE email = 'joe@datastax.com';
 ```
+
+✅ We know that primary key column values cannot change, but we can try anyway.
+Update the user email:
+```
+-- This will result in an error
+UPDATE users SET email = 'joseph@datastax.com'
+WHERE email = 'joe@datastax.com';
+```
+
+✅ The right solution is to insert a new row and delete the old one:
+```
+INSERT INTO users (email, name, age, date_joined) 
+VALUES ('joseph@datastax.com', 'Joe', 25, '2020-01-01');
+DELETE FROM users
+WHERE email = 'joe@datastax.com';
+
+SELECT * FROM users WHERE email = 'joe@datastax.com';
+SELECT * FROM users WHERE email = 'joseph@datastax.com';
+```
+
+✅ Change the remaining two rows:
+<details>
+  <summary>Solution</summary>
+
+```
+INSERT INTO ratings_by_user (email, title, year, rating) 
+VALUES ('joseph@datastax.com', 'Alice in Wonderland', 2010, 9);
+INSERT INTO ratings_by_user (email, title, year, rating)  
+VALUES ('joseph@datastax.com', 'Edward Scissorhands', 1990, 10);
+DELETE FROM ratings_by_user
+WHERE email = 'joe@datastax.com';
+
+SELECT * FROM ratings_by_user WHERE email = 'joe@datastax.com';
+SELECT * FROM ratings_by_user WHERE email = 'joseph@datastax.com';
+```
+
+</details>
 
 <!-- NAVIGATION -->
 <div id="navigation-bottom" class="navigation-bottom">

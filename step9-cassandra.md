@@ -20,34 +20,43 @@
 
 <!-- CONTENT -->
 
-<div class="step-title">Working with tables</div>
+<div class="step-title">More capabilities</div>
 
-Try the following CQL shell commands and CQL statements that are applicable to tables. 
+CQL statements `INSERT`, `UPDATE` and `DELETE` offer several less commonly used and more advanced 
+capabilities that you should be aware of, including:
+- *Conditional inserts, updates and deletes*: a condition must be satisfied for an operation to succeed;
+- *Inserts and updates with TTL*: inserted or updated data automatically expires after Time-to-Live (TTL) seconds;
+- *Inserts, updates and deletes with timestamps*: mark inserted or updated values with write-time timestamps or 
+  delete values whose write-time timestamps are older than the specified timestamp;
+- *Inserts, updates and deletes for counters or collections*: operations that deal with the `COUNTER` data type or
+  collection data types like `SET`, `LIST` and `MAP` use additional syntactic constructs.
 
-✅ List the names of all tables in the current keyspace:
+We only demonstrate a couple of use cases for conditional statements here.
+
+✅ A conditional `INSERT` can be used to prevent an upsert when it matters, 
+such as when two users try to register using the same email. Only the first 
+`INSERT` should succeed:
 ```
-DESCRIBE TABLES;
+INSERT INTO users (email, name, age, date_joined) 
+VALUES ('art@datastax.com', 'Art', 33, '2020-05-04')
+IF NOT EXISTS;
+INSERT INTO users (email, name, age, date_joined) 
+VALUES ('art@datastax.com', 'Arthur', 44, '2020-05-04')
+IF NOT EXISTS;
+
+SELECT * FROM users WHERE email = 'art@datastax.com';
 ```
 
-✅ Output all CQL statements that can be used to recreate the given table:
+✅ A conditional `UPDATE` can also be used to prevent an upsert that may result from 
+concurrent updates. For example, only the first `UPDATE` should succeed:
 ```
-DESCRIBE TABLE movies;
-```
+UPDATE users SET name = 'Artie'
+WHERE email = 'art@datastax.com' IF name = 'Art';
+UPDATE users SET name = 'Arthur'
+WHERE email = 'art@datastax.com' IF name = 'Art';
 
-✅ Alter the given table:
-```
-ALTER TABLE movies ADD country TEXT;
-```
-
-✅ Delete all rows from the table:
-```
-TRUNCATE movies;
-```
-
-✅ Remove the given table:
-```
-DROP TABLE movies;
-```
+SELECT * FROM users WHERE email = 'art@datastax.com';
+``` 
 
 <!-- NAVIGATION -->
 <div id="navigation-bottom" class="navigation-bottom">

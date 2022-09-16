@@ -20,68 +20,53 @@
 
 <!-- CONTENT -->
 
-<div class="step-title">Create table "genres"</div>
+<div class="step-title">Deleting rows</div>
 
-Our next table will store information about movie genres as shown below. This table 
-with *single-row partitions* and a *simple partition key* is for you to define.
+Let's delete all data from our tables.
 
-| genre     | description |
-|-----------|-------------|
-| Adventure |  A story about a protagonist who journeys to epic or distant places to accomplish something. |
-| Fantasy   |  A story about magic or supernatural forces. | 
+✅ Delete one column in a row:
+```
+DELETE age FROM users
+WHERE email = 'joe@datastax.com';
 
-<br/>
+SELECT * FROM users WHERE email = 'joe@datastax.com';
+```
 
-✅ Create the table:
+✅ Delete a row:
+```
+DELETE FROM ratings_by_user
+WHERE email = 'joe@datastax.com'
+  AND title = 'Alice in Wonderland'
+  AND year  = 2010;
+  
+SELECT * FROM ratings_by_user WHERE email = 'joe@datastax.com';
+```
+
+✅ Delete all rows in a partition:
+```
+DELETE FROM ratings_by_user
+WHERE email = 'joe@datastax.com';
+  
+SELECT * FROM ratings_by_user WHERE email = 'joe@datastax.com';
+```
+
+✅ Delete the remaining rows in the tables:
 <details>
   <summary>Solution</summary>
 
 ```
-CREATE TABLE IF NOT EXISTS genres (
-  genre TEXT,
-  description TEXT,
-  PRIMARY KEY ((genre))
-);
-```
+SELECT * FROM users;
+SELECT * FROM ratings_by_user;
 
-</details>
+DELETE FROM users
+WHERE email = 'joe@datastax.com';
+DELETE FROM users
+WHERE email = 'jen@datastax.com';
+DELETE FROM ratings_by_user
+WHERE email = 'jen@datastax.com';
 
-<br/>
-
-✅ Insert the rows:
-<details>
-  <summary>Solution</summary>
-
-```
-INSERT INTO genres (genre, description) 
-VALUES ('Adventure', 'A story about a protagonist who journeys to epic or distant places to accomplish something.');
-INSERT INTO genres (genre, description) 
-VALUES ('Fantasy', 'A story about magic or supernatural forces.');
-```
-
-</details>
-
-<br/>
-
-✅ Retrieve one row:
-<details>
-  <summary>Solution</summary>
-
-```
-SELECT * FROM genres
-WHERE genre = 'Fantasy';
-```
-
-</details>
-
-<br/>
-
-✅ Retrieve all rows:
-<details>
-  <summary>Solution</summary>
-
-```
-SELECT * FROM genres;
+SELECT * FROM users;
+SELECT * FROM ratings_by_user;
 ```
 
 </details>

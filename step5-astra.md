@@ -20,49 +20,36 @@
 
 <!-- CONTENT -->
 
-<div class="step-title">Create table "movies"</div>
+<div class="step-title">Updating rows</div>
 
-Our second table will store information about movies as shown below.  To define 
-this table with *single-row partitions*, we can use `title` and `year`
-as a *composite partition key*.
-
-| title               | year | duration | avg_rating |
-|---------------------|------|----------|------------|
-| Alice in Wonderland | 2010 |   108    |    6.00    |
-| Alice in Wonderland | 1951 |    75    |    7.08    |
-
-<br/>
-
-✅ Create the table:
+✅ We need to update information about the following user and his ratings:
 ```
-CREATE TABLE IF NOT EXISTS movies (
-  title TEXT,
-  year INT,
-  duration INT,
-  avg_rating FLOAT,
-  PRIMARY KEY ((title, year))
-);
+SELECT * FROM users WHERE email = 'joe@datastax.com';
+SELECT * FROM ratings_by_user WHERE email = 'joe@datastax.com';
 ```
 
-✅ Insert the rows:
+✅ Update the user name and age:
 ```
-INSERT INTO movies (title, year, duration, avg_rating) 
-VALUES ('Alice in Wonderland', 2010, 108, 6.00);
-INSERT INTO movies (title, year, duration, avg_rating) 
-VALUES ('Alice in Wonderland', 1951, 75, 7.08);
+UPDATE users SET name = 'Joseph', age = 26
+WHERE email = 'joe@datastax.com';
+
+SELECT * FROM users WHERE email = 'joe@datastax.com';
 ```
 
-✅ Retrieve one row:
+✅ Change the rating left by the user for one of the movies:
+<details>
+  <summary>Solution</summary>
+
 ```
-SELECT * FROM movies
-WHERE title = 'Alice in Wonderland'
-  AND year = 2010;
+UPDATE ratings_by_user SET rating = 3 
+WHERE email = 'joe@datastax.com'
+  AND title = 'Alice in Wonderland'
+  AND year  = 2010;
+
+SELECT * FROM ratings_by_user WHERE email = 'joe@datastax.com';
 ```
 
-✅ Retrieve all rows:
-```
-SELECT * FROM movies;
-```
+</details>
 
 <!-- NAVIGATION -->
 <div id="navigation-bottom" class="navigation-bottom">

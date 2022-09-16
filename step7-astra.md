@@ -20,73 +20,74 @@
 
 <!-- CONTENT -->
 
-<div class="step-title">Create table "actors"</div>
+<div class="step-title">Upserting rows</div>
 
-Our last table will store information about movie actors as shown below. This table 
-with *single-row partitions* and a *composite partition key* is for you to define.
+Since our tables `users` and `ratings_by_user` are now empty, we need to populate them again 
+with the same data. This time, however, let's only use statements `INSERT` and `UPDATE` to always perform *upserts*.
 
-| first_name | last_name  | dob        |
-|----------- |------------|------------|
-| Johnny     | Depp       | 1963-06-09 |
-| Anne       | Hathaway   | 1982-11-12 | 
-
-<br/>
-
-✅ Create the table:
-<details>
-  <summary>Solution</summary>
-
+✅ If you are not sure that your tables are empty, truncate them:
 ```
-CREATE TABLE IF NOT EXISTS actors (
-  first_name TEXT,
-  last_name TEXT,
-  dob DATE,
-  PRIMARY KEY ((first_name, last_name))
-);
+TRUNCATE TABLE users;
+TRUNCATE TABLE ratings_by_user;
 ```
 
-</details>
-
-<br/>
-
-✅ Insert the rows:
-<details>
-  <summary>Solution</summary>
-
+✅ Upsert the new rows:
 ```
-INSERT INTO actors (first_name, last_name, dob) 
-VALUES ('Johnny', 'Depp', '1963-06-09');
-INSERT INTO actors (first_name, last_name, dob) 
-VALUES ('Anne', 'Hathaway', '1982-11-12');
-```
+UPDATE users 
+SET name = 'Joe', date_joined = '2020-01-01'
+WHERE email = 'joe@datastax.com';
+UPDATE users 
+SET name = 'Jen', date_joined = '2020-01-01'
+WHERE email = 'jen@datastax.com';
 
-</details>
-
-<br/>
-
-✅ Retrieve one row:
-<details>
-  <summary>Solution</summary>
-
-```
-SELECT * FROM actors
-WHERE first_name = 'Johnny'
-  AND last_name = 'Depp';
-```
-
-</details>
-
-<br/>
-
-✅ Retrieve all rows:
-<details>
-  <summary>Solution</summary>
-
-```
-SELECT * FROM actors;
+UPDATE ratings_by_user 
+SET rating = -9
+WHERE email = 'joe@datastax.com'
+  AND title = 'Alice in Wonderland'
+  AND year  = 2010;
+UPDATE ratings_by_user 
+SET rating = -10
+WHERE email = 'joe@datastax.com'
+  AND title = 'Edward Scissorhands'
+  AND year  = 1990;
+UPDATE ratings_by_user 
+SET rating = -8
+WHERE email = 'jen@datastax.com'
+  AND title = 'Alice in Wonderland'
+  AND year  = 1951;
+UPDATE ratings_by_user 
+SET rating = -10
+WHERE email = 'jen@datastax.com'
+  AND title = 'Alice in Wonderland'
+  AND year  = 2010;
+  
+SELECT * FROM users;
+SELECT * FROM ratings_by_user;  
 ```
 
-</details>
+✅ Upsert the incomplete or incorrect column values:
+```
+INSERT INTO users (email, age) 
+VALUES ('joe@datastax.com', 25);
+INSERT INTO users (email, age) 
+VALUES ('jen@datastax.com', 27);
+
+INSERT INTO ratings_by_user (email, title, year, rating) 
+VALUES ('joe@datastax.com', 'Alice in Wonderland', 2010, 9);
+INSERT INTO ratings_by_user (email, title, year, rating)  
+VALUES ('joe@datastax.com', 'Edward Scissorhands', 1990, 10);
+INSERT INTO ratings_by_user (email, title, year, rating)  
+VALUES ('jen@datastax.com', 'Alice in Wonderland', 1951, 8);
+INSERT INTO ratings_by_user (email, title, year, rating) 
+VALUES ('jen@datastax.com', 'Alice in Wonderland', 2010, 10);
+
+SELECT * FROM users;
+SELECT * FROM ratings_by_user;
+```
+
+Notice how we inserted new rows using `UPDATE` and updated existing rows using `INSERT`. 
+This is what upserts are all about. `UPdate` and `inSERT` are really similar write operations 
+under the hood, even though their syntax looks different on the surface.
 
 <!-- NAVIGATION -->
 <div id="navigation-bottom" class="navigation-bottom">

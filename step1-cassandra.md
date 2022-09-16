@@ -20,20 +20,24 @@
 
 <!-- CONTENT -->
 
-<div class="step-title">Tables, columns, data types, rows, partitions, keys, ordering</div>
+<div class="step-title">Inserts, updates, deletes and upserts</div>
 
-A *table* in Apache Cassandra™ shares many similarities with a table in a relational database. It has named *columns* with *data types* and *rows* with *values*. A *primary key* uniquely identifies a row in a table. 
+Data manipulation operations in Apache Cassandra™ include *inserts*, *updates* and *deletes*, and have respective CQL statements 
+`INSERT`, `UPDATE` and `DELETE`. They are used to add, change, and remove rows and column values in Cassandra tables.
+While their general semantics is easy to understand and their syntax is similar to the respective operations in relational databases
+and SQL, there are also important differences.
 
-There are also important differences. In Cassandra, on one hand, a table is a set of *rows* containing values and, on the other hand,
-a table is also a set of *partitions* containing rows. Specifically, each row belongs to exactly one partition and each partition contains one or more rows. A *primary key* consists of a mandatory *partition key* and optional *clustering key*, where
-a partition key uniquely identifies a partition in a table and a clustering key uniquely identifies a row in a partition.
+All three operations are *write* operations. Inserts write new data into tables. Similarly, updates write new data into tables.
+Even deletes write markers, called *tombstones*, to signify that data is now removed. Since there is *no read before a write*, 
+the operations do their writes regardless of whether a row with the same primary key already exists in a table or not. Consider the following three situations. First, when inserting a new row into a table and the table already has a row with the same primary key, 
+the existing row will effectively be updated. In other words, the insert operation will *upsert* data into the existing row. 
+Second, when updating a row that does not exist in a table, the row will be inserted into the table. In other words, 
+the update operation will *upsert* the new row into the table. You can think about an *upsert* as an insert that causes an update or 
+an update that causes an insert. Finally, when deleting a row that does not exist in a table, a tombstone 
+will simply be written.
 
-A table with *single-row partitions* is a table where there is exactly one row per partition. A table 
-with single-row partitions defines a primary key to be equivalent to a partition key.  
-
-A table with *multi-row partitions* is a table where there can be one or more rows per partition. A table 
-with multi-row partitions defines a primary key to be a combination of both partition and clustering keys. Rows in the 
-same partition have the same partition key values and are *ordered* based on their clustering key values using the default ascendant order.
+It is also worth mentioning, that Cassandra does support more expensive *conditional* inserts, updates and deletes 
+that implement the read-before-write pattern. We will see examples of those, too.
 
 <!-- NAVIGATION -->
 <div id="navigation-bottom" class="navigation-bottom">

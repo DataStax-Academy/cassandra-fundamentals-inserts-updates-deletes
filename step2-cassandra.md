@@ -20,37 +20,39 @@
 
 <!-- CONTENT -->
 
-<div class="step-title">Creating tables</div>
+<div class="step-title">Syntax</div>
 
-To create a table, Cassandra Query Language has the `CREATE TABLE` statement with the following simplified syntax:
+For inserting updating and deleting rows and columns in Cassandra tables, Cassandra Query Language 
+provides statements `INSERT`, `UPDATE` and `DELETE` with the following simplified syntax:
 
 <pre class="non-executable-code">
-CREATE TABLE [ IF NOT EXISTS ] [keyspace_name.]table_name
-( 
-  column_name data_type [ , ... ] 
-  PRIMARY KEY ( 
-   ( partition_key_column_name  [ , ... ] )
-   [ clustering_key_column_name [ , ... ] ]
-  )     
-)
-[ WITH CLUSTERING ORDER BY 
-   ( clustering_key_column_name ASC|DESC [ , ... ] )
-];
+INSERT INTO [keyspace_name.] table_name 
+       (column_name  [ , ... ]) 
+VALUES (column_value [ , ... ]);
+
+UPDATE [keyspace_name.] table_name
+SET column_name = column_value [ , ... ] 
+WHERE primary_key_column_name = value [ AND ... ];
+
+DELETE [column_name][ , ... ]
+FROM [keyspace_name.] table_name 
+WHERE primary_key_column_name = value [ AND ... ];
 </pre>
 
-First, notice that a table is created within an existing keyspace. If a *keyspace name* is omitted, the current working keyspace is used.
+All statements require *keyspace name* and *table name* to identify an existing table to 
+perform an operation on. If a *keyspace name* is omitted, the current working keyspace is used.
 
-Second, *keyspace*, *table* and *column* *names* can contain alphanumeric characters and underscores. By default, 
-names are case-insensitive, but case sensitivity can be forced by using double quotation marks around a name.
+The `INSERT` statement inserts a new row into a table or upserts data into an existing row. 
+All primary key columns and their values must be 
+specified to identify a row.
 
-Third, there are many CQL *data types*, including native, collection and user-defined data types. For now, we will use some of the simplest and self-descriptive ones like `TEXT`, `INT`, `FLOAT`, and `DATE`.
+The `UPDATE` statement updates individual non-key columns in an existing row or upserts a new row. All 
+primary key columns and their values must be 
+specified in the `WHERE` clause to identify a row.
 
-Fourth, notice that there are additional 
-parentheses around the partition key columns that can be omitted when the partition key has only one column (a.k.a. 
-*simple partition key*) and are required when the partition key has more than one column (a.k.a. 
-*composite partition key*). 
-
-Finally, when a clustering key is defined, ordering is optionally specified in the last clause with ascendant order being the default. 
+The `DELETE` statement removes an entire partition, a subset of rows in a partition or an individual row; 
+when column names are specified, only selected non-key columns are removed. 
+The `WHERE` clause uses primary key columns to identify one or more rows in a partition.
 
 <!-- NAVIGATION -->
 <div id="navigation-bottom" class="navigation-bottom">

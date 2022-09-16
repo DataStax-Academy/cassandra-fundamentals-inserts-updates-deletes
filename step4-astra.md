@@ -20,48 +20,67 @@
 
 <!-- CONTENT -->
 
-<div class="step-title">Create table "users"</div>
+<div class="step-title">Inserting rows</div>
 
-Our first table will store information about users as shown below. To define 
-this table with *single-row partitions*, we can use `email`
-as a *simple partition key*.
+We are ready to populate tables `users` and `ratings_by_user` with the following rows:
 
 | email            | name | age | date_joined |
 |------------------|------|-----|-------------|
-| joe@datastax.com |  Joe |  25 |  2020-01-01 |
-| jen@datastax.com |  Jen |  27 |  2020-01-01 | 
+| <span style="background-color:#F5B7B1">joe@datastax.com</span> |  Joe |  25 |  2020-01-01 |
+| <span style="background-color:#AED6F1">jen@datastax.com</span> |  Jen |  27 |  2020-01-01 | 
+
+| email            | title               | year | rating |
+|------------------|---------------------|------|--------|
+| <span style="background-color:#F5B7B1">joe@datastax.com</span> | Alice in Wonderland | 2010 |      9 |
+| <span style="background-color:#F5B7B1">joe@datastax.com</span> | Edward Scissorhands | 1990 |     10 |
+| <span style="background-color:#AED6F1">jen@datastax.com</span> | Alice in Wonderland | 1951 |      8 |
+| <span style="background-color:#AED6F1">jen@datastax.com</span> | Alice in Wonderland | 2010 |     10 |
 
 <br/>
 
-✅ Create the table:
-```
-CREATE TABLE IF NOT EXISTS users (
-  email TEXT,
-  name TEXT,
-  age INT,
-  date_joined DATE,
-  PRIMARY KEY ((email))
-);
-```
-
-✅ Insert the rows:
+✅ Insert the row into table `users`:
 ```
 INSERT INTO users (email, name, age, date_joined) 
 VALUES ('joe@datastax.com', 'Joe', 25, '2020-01-01');
-INSERT INTO users (email, name, age, date_joined) 
-VALUES ('jen@datastax.com', 'Jen', 27, '2020-01-01');
 ```
 
-✅ Retrieve one row:
+✅ Insert the rows into table `ratings_by_user`:
 ```
-SELECT * FROM users
-WHERE email = 'joe@datastax.com';
+INSERT INTO ratings_by_user (email, title, year, rating) 
+VALUES ('joe@datastax.com', 'Alice in Wonderland', 2010, 9);
+INSERT INTO ratings_by_user (email, title, year, rating)  
+VALUES ('joe@datastax.com', 'Edward Scissorhands', 1990, 10);
 ```
 
-✅ Retrieve all rows:
+✅ Retrieve all rows from the tables:
 ```
 SELECT * FROM users;
+SELECT * FROM ratings_by_user;
 ```
+
+<br/>
+
+✅ We only inserted a half of the rows shown above and left 
+the other half for you to practice!
+
+Insert the remaining rows into the tables:
+<details>
+  <summary>Solution</summary>
+
+```
+INSERT INTO users (email, name, age, date_joined) 
+VALUES ('jen@datastax.com', 'Jen', 27, '2020-01-01');
+
+INSERT INTO ratings_by_user (email, title, year, rating)  
+VALUES ('jen@datastax.com', 'Alice in Wonderland', 1951, 8);
+INSERT INTO ratings_by_user (email, title, year, rating) 
+VALUES ('jen@datastax.com', 'Alice in Wonderland', 2010, 10);
+
+SELECT * FROM users;
+SELECT * FROM ratings_by_user;
+```
+
+</details>
 
 <!-- NAVIGATION -->
 <div id="navigation-bottom" class="navigation-bottom">

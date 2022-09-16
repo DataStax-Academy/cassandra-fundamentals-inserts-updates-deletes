@@ -20,7 +20,7 @@
 
 <!-- CONTENT -->
 
-<div class="step-title">Connect to Cassandra and create a keyspace</div>
+<div class="step-title">Connect to Cassandra and create a keyspace and tables</div>
 
 ✅ Start Cassandra:
 ```
@@ -34,7 +34,7 @@ cqlsh
 
 ✅ Create the keyspace:
 ```
-CREATE KEYSPACE ks_single_row_partitions
+CREATE KEYSPACE ks_inserts_updates_deletes
 WITH replication = {
   'class': 'NetworkTopologyStrategy', 
   'DC-Houston': 1 };
@@ -42,7 +42,25 @@ WITH replication = {
 
 ✅ Set the current working keyspace:
 ```
-USE ks_single_row_partitions;
+USE ks_inserts_updates_deletes;
+```
+
+✅ Create the tables:
+```
+CREATE TABLE IF NOT EXISTS users (
+  email TEXT,
+  name TEXT,
+  age INT,
+  date_joined DATE,
+  PRIMARY KEY ((email))
+);
+CREATE TABLE IF NOT EXISTS ratings_by_user (
+  email TEXT,
+  title TEXT,
+  year INT,
+  rating INT,
+  PRIMARY KEY ((email), title, year)
+);
 ```
 
 <!-- NAVIGATION -->
