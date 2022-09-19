@@ -22,7 +22,7 @@
 
 <div class="step-title">Inserts, updates, deletes and upserts</div>
 
-Data manipulation operations in Apache Cassandra™ include *inserts*, *updates* and *deletes*, and have respective CQL statements 
+Data manipulation operations in Apache Cassandra include *inserts*, *updates* and *deletes*, and have respective CQL statements 
 `INSERT`, `UPDATE` and `DELETE`. They are used to add, change, and remove rows and column values in Cassandra tables.
 While their general semantics is easy to understand and their syntax is similar to the respective operations in relational databases
 and SQL, there are also important differences.
