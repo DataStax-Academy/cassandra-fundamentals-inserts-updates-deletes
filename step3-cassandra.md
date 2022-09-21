@@ -34,7 +34,7 @@ cqlsh
 
 ✅ Create the keyspace:
 ```
-CREATE KEYSPACE ks_inserts_updates_deletes
+CREATE KEYSPACE IF NOT EXISTS ks_inserts_updates_deletes
 WITH replication = {
   'class': 'NetworkTopologyStrategy', 
   'DC-Houston': 1 };
